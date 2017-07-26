@@ -4,7 +4,7 @@ package com.mercury.platform.ui.adr.components;
 import com.mercury.platform.shared.config.descriptor.HotKeyDescriptor;
 import com.mercury.platform.shared.config.descriptor.adr.AdrComponentDescriptor;
 import com.mercury.platform.shared.config.descriptor.adr.AdrDurationComponentDescriptor;
-import com.mercury.platform.shared.config.descriptor.adr.AdrGroupDescriptor;
+import com.mercury.platform.shared.config.descriptor.adr.AdrTrackerGroupDescriptor;
 import com.mercury.platform.shared.store.MercuryStoreCore;
 import com.mercury.platform.ui.adr.components.panel.FieldValueListener;
 import com.mercury.platform.ui.adr.validator.DoubleFieldValidator;
@@ -40,15 +40,15 @@ public class AdrComponentsFactory {
         JLabel heightLabel = this.componentsFactory.getTextLabel("Height:");
         JTextField widthField = this.getSmartField(descriptor.getSize().width, new IntegerFieldValidator(10,2000), value -> {
             descriptor.setSize(new Dimension(value, descriptor.getSize().height));
-            if(descriptor instanceof AdrGroupDescriptor){
-                ((AdrGroupDescriptor) descriptor).getCells().forEach(item -> item.setSize(descriptor.getSize()));
+            if(descriptor instanceof AdrTrackerGroupDescriptor){
+                ((AdrTrackerGroupDescriptor) descriptor).getCells().forEach(item -> item.setSize(descriptor.getSize()));
             }
             MercuryStoreUI.adrReloadSubject.onNext(descriptor);
         });
         JTextField heightField = this.getSmartField(descriptor.getSize().height, new IntegerFieldValidator(10,1000), value -> {
             descriptor.setSize(new Dimension(descriptor.getSize().width,value));
-            if(descriptor instanceof AdrGroupDescriptor){
-                ((AdrGroupDescriptor) descriptor).getCells().forEach(item -> item.setSize(descriptor.getSize()));
+            if(descriptor instanceof AdrTrackerGroupDescriptor){
+                ((AdrTrackerGroupDescriptor) descriptor).getCells().forEach(item -> item.setSize(descriptor.getSize()));
             }
             MercuryStoreUI.adrReloadSubject.onNext(descriptor);
         });
@@ -72,15 +72,15 @@ public class AdrComponentsFactory {
         JLabel yLabel = this.componentsFactory.getTextLabel("Y:");
         JTextField xField = this.getSmartField(descriptor.getLocation().x,new IntegerFieldValidator(0,10000),value -> {
             descriptor.setLocation(new Point(value, descriptor.getLocation().y));
-            if(descriptor instanceof AdrGroupDescriptor){
-                ((AdrGroupDescriptor) descriptor).getCells().forEach(item -> item.setLocation(descriptor.getLocation()));
+            if(descriptor instanceof AdrTrackerGroupDescriptor){
+                ((AdrTrackerGroupDescriptor) descriptor).getCells().forEach(item -> item.setLocation(descriptor.getLocation()));
             }
             MercuryStoreUI.adrReloadSubject.onNext(descriptor);
         });
         JTextField yField = this.getSmartField(descriptor.getLocation().y,new IntegerFieldValidator(0,5000),value -> {
             descriptor.setLocation(new Point(descriptor.getLocation().x,value));
-            if(descriptor instanceof AdrGroupDescriptor){
-                ((AdrGroupDescriptor) descriptor).getCells().forEach(item -> item.setLocation(descriptor.getLocation()));
+            if(descriptor instanceof AdrTrackerGroupDescriptor){
+                ((AdrTrackerGroupDescriptor) descriptor).getCells().forEach(item -> item.setLocation(descriptor.getLocation()));
             }
             MercuryStoreUI.adrReloadSubject.onNext(descriptor);
         });
@@ -93,8 +93,8 @@ public class AdrComponentsFactory {
             if(source.equals(descriptor)){
                 xField.setText(String.valueOf(descriptor.getLocation().x));
                 yField.setText(String.valueOf(descriptor.getLocation().y));
-                if(descriptor instanceof AdrGroupDescriptor){
-                    ((AdrGroupDescriptor) descriptor).getCells().forEach(item -> item.setLocation(descriptor.getLocation()));
+                if(descriptor instanceof AdrTrackerGroupDescriptor){
+                    ((AdrTrackerGroupDescriptor) descriptor).getCells().forEach(item -> item.setLocation(descriptor.getLocation()));
                 }
             }
         });
@@ -314,7 +314,7 @@ public class AdrComponentsFactory {
         return root;
     }
 
-    public JPanel getGapPanel(AdrGroupDescriptor descriptor){
+    public JPanel getGapPanel(AdrTrackerGroupDescriptor descriptor){
         JPanel root = this.componentsFactory.getJPanel(new GridLayout(1, 4,4,0));
         root.setBackground(AppThemeColor.SLIDE_BG);
         JLabel hGap = this.componentsFactory.getTextLabel("hGap:");
@@ -337,7 +337,7 @@ public class AdrComponentsFactory {
     public JPopupMenu getContextMenu(AdrComponentDescriptor selectedDescriptor) {
         JPopupMenu contextMenu = this.componentsFactory.getContextPanel();
         switch (selectedDescriptor.getType()){
-            case GROUP: {
+            case TRACKER_GROUP: {
                 JMenuItem addComponent = this.componentsFactory.getMenuItem("Add");
                 JMenuItem iconComponent = this.componentsFactory.getMenuItem("Icon");
                 JMenuItem pbComponent = this.componentsFactory.getMenuItem("Progress bar");
@@ -418,7 +418,7 @@ public class AdrComponentsFactory {
         });
         return expandButton;
     }
-    public String getGroupTypeIconPath(AdrGroupDescriptor descriptor){
+    public String getGroupTypeIconPath(AdrTrackerGroupDescriptor descriptor){
         String iconPath = "app/adr/static_group_icon.png";
         switch (descriptor.getGroupType()) {
             case STATIC: {

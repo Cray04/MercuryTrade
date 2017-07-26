@@ -31,7 +31,7 @@ public class AdrConfigurationServiceMock extends BaseConfigurationService<List<A
     public List<AdrProfileDescriptor> getDefault() {
         AdrProfileDescriptor profile = new AdrProfileDescriptor();
         profile.setSelected(true);
-        AdrGroupDescriptor groupDescriptor = this.getDefaultIconGroup();
+        AdrTrackerGroupDescriptor groupDescriptor = this.getDefaultIconGroup();
         AdrIconDescriptor icon1 = this.getDefaultIcon();
         icon1.setIconPath("Arctic_Armour_skill_icon");
         icon1.setHotKeyDescriptor(new HotKeyDescriptor(49,'1',false,false,false,false));
@@ -46,15 +46,15 @@ public class AdrConfigurationServiceMock extends BaseConfigurationService<List<A
         icon3.setHotKeyDescriptor(new HotKeyDescriptor(51,'3',false,true,false,false));
         groupDescriptor.setCells(Arrays.asList(icon1,icon2,icon3,icon2));
 
-        AdrGroupDescriptor groupDescriptor1 = new AdrGroupDescriptor();
+        AdrTrackerGroupDescriptor groupDescriptor1 = new AdrTrackerGroupDescriptor();
         groupDescriptor1.setSize(new Dimension(64,64));
         groupDescriptor1.setLocation(new Point(500,500));
-        groupDescriptor1.setType(AdrComponentType.GROUP);
-        groupDescriptor1.setContentType(AdrGroupContentType.ICONS);
+        groupDescriptor1.setType(AdrComponentType.TRACKER_GROUP);
+        groupDescriptor1.setContentType(AdrTrackerGroupContentType.ICONS);
         groupDescriptor1.setOrientation(AdrComponentOrientation.VERTICAL);
-        groupDescriptor1.setGroupType(AdrGroupType.DYNAMIC);
+        groupDescriptor1.setGroupType(AdrTrackerGroupType.DYNAMIC);
         groupDescriptor1.setCells(Arrays.asList(icon3,icon1,icon2,icon3));
-        profile.setContents(Arrays.stream(new AdrComponentDescriptor[] {groupDescriptor,groupDescriptor1,this.getDefaultPBGroup()}).collect(Collectors.toList()));
+        profile.setContents(Arrays.stream(new AdrComponentDescriptor[] {groupDescriptor,groupDescriptor1,this.getDefaultPBGroup(),this.getDefaultGroup()}).collect(Collectors.toList()));
         return Arrays.stream(new AdrProfileDescriptor[]{profile}).collect(Collectors.toList());
     }
 
@@ -122,11 +122,11 @@ public class AdrConfigurationServiceMock extends BaseConfigurationService<List<A
     }
 
     @Override
-    public AdrGroupDescriptor getDefaultIconGroup() {
-        AdrGroupDescriptor groupDescriptor = this.getDefaultGroup();
+    public AdrTrackerGroupDescriptor getDefaultIconGroup() {
+        AdrTrackerGroupDescriptor groupDescriptor = this.getDefaultTrackerGroup();
         groupDescriptor.setTitle("icon group");
         groupDescriptor.setSize(new Dimension(64,64));
-        groupDescriptor.setContentType(AdrGroupContentType.ICONS);
+        groupDescriptor.setContentType(AdrTrackerGroupContentType.ICONS);
         List<AdrComponentDescriptor> icons = new ArrayList<>();
         icons.add(this.getDefaultIcon());
         groupDescriptor.setCells(icons);
@@ -134,11 +134,11 @@ public class AdrConfigurationServiceMock extends BaseConfigurationService<List<A
     }
 
     @Override
-    public AdrGroupDescriptor getDefaultPBGroup() {
-        AdrGroupDescriptor groupDescriptor = this.getDefaultGroup();
+    public AdrTrackerGroupDescriptor getDefaultPBGroup() {
+        AdrTrackerGroupDescriptor groupDescriptor = this.getDefaultTrackerGroup();
         groupDescriptor.setTitle("progress bar group");
         groupDescriptor.setSize(new Dimension(240,30));
-        groupDescriptor.setContentType(AdrGroupContentType.PROGRESS_BARS);
+        groupDescriptor.setContentType(AdrTrackerGroupContentType.PROGRESS_BARS);
         List<AdrComponentDescriptor> pbList = new ArrayList<>();
         pbList.add(this.getDefaultProgressBar());
         pbList.add(this.getDefaultProgressBar());
@@ -146,14 +146,37 @@ public class AdrConfigurationServiceMock extends BaseConfigurationService<List<A
         groupDescriptor.setCells(pbList);
         return groupDescriptor;
     }
-    private AdrGroupDescriptor getDefaultGroup(){
-        AdrGroupDescriptor groupDescriptor = new AdrGroupDescriptor();
+    private AdrTrackerGroupDescriptor getDefaultTrackerGroup(){
+        AdrTrackerGroupDescriptor groupDescriptor = new AdrTrackerGroupDescriptor();
         groupDescriptor.setId(this.idGenerator.incrementAndGet());
         groupDescriptor.setTitle("group");
         groupDescriptor.setLocation(new Point(new Random().nextInt(600), new Random().nextInt(600)));
-        groupDescriptor.setType(AdrComponentType.GROUP);
+        groupDescriptor.setType(AdrComponentType.TRACKER_GROUP);
         groupDescriptor.setOrientation(AdrComponentOrientation.VERTICAL);
-        groupDescriptor.setGroupType(AdrGroupType.STATIC);
+        groupDescriptor.setGroupType(AdrTrackerGroupType.STATIC);
+        return groupDescriptor;
+    }
+
+    @Override
+    public AdrGroupDescriptor getDefaultGroup() {
+        AdrGroupDescriptor groupDescriptor = new AdrGroupDescriptor();
+        groupDescriptor.setTitle("Group");
+        groupDescriptor.setType(AdrComponentType.GROUP);
+        List<AdrComponentDescriptor> contentList = new ArrayList<>();
+        AdrIconDescriptor defaultIcon = this.getDefaultIcon();
+        AdrProgressBarDescriptor defaultProgressBar = this.getDefaultProgressBar();
+        AdrTrackerGroupDescriptor defaultGroup = this.getDefaultIconGroup();
+        defaultGroup.getCells().add(this.getDefaultIcon());
+        defaultGroup.getCells().add(this.getDefaultIcon());
+        defaultGroup.setLocation(new Point(100,30));
+        defaultIcon.setLocation(new Point(30,30));
+        defaultProgressBar.setLocation(new Point(30,100));
+        contentList.add(defaultIcon);
+        contentList.add(defaultGroup);
+        contentList.add(defaultProgressBar);
+        groupDescriptor.setContent(contentList);
+        groupDescriptor.setLocation(new Point(new Random().nextInt(600), new Random().nextInt(600)));
+        groupDescriptor.setSize(new Dimension(400,300));
         return groupDescriptor;
     }
 }

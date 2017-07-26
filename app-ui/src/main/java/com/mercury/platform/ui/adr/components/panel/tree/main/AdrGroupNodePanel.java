@@ -1,8 +1,7 @@
 package com.mercury.platform.ui.adr.components.panel.tree.main;
 
-import com.mercury.platform.shared.config.descriptor.adr.AdrGroupDescriptor;
+import com.mercury.platform.shared.config.descriptor.adr.AdrTrackerGroupDescriptor;
 import com.mercury.platform.ui.adr.components.panel.tree.AdrNodePanel;
-import com.mercury.platform.ui.adr.dialog.ExportHelper;
 import com.mercury.platform.ui.adr.routing.AdrPageDefinition;
 import com.mercury.platform.ui.adr.routing.AdrPageState;
 import com.mercury.platform.ui.components.fields.font.FontStyle;
@@ -13,11 +12,11 @@ import com.mercury.platform.ui.misc.TooltipConstants;
 import javax.swing.*;
 import java.awt.*;
 
-public class AdrGroupNodePanel extends AdrNodePanel<AdrGroupDescriptor> {
+public class AdrGroupNodePanel extends AdrNodePanel<AdrTrackerGroupDescriptor> {
     private JLabel groupLabel;
     private JPanel container;
     private JButton expandButton;
-    public AdrGroupNodePanel(AdrGroupDescriptor descriptor) {
+    public AdrGroupNodePanel(AdrTrackerGroupDescriptor descriptor) {
         super(descriptor,false);
     }
 

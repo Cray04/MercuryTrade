@@ -3,6 +3,7 @@ package com.mercury.platform.ui.adr.components.panel.tree.main;
 import com.mercury.platform.shared.config.descriptor.adr.AdrIconDescriptor;
 import com.mercury.platform.ui.adr.components.panel.tree.AdrNodePanel;
 import com.mercury.platform.ui.adr.components.panel.ui.MercuryTracker;
+import com.mercury.platform.ui.components.ComponentsFactory;
 import com.mercury.platform.ui.components.fields.font.FontStyle;
 import com.mercury.platform.ui.misc.AppThemeColor;
 
@@ -32,9 +33,8 @@ public class AdrIconNodePanel extends AdrNodePanel<AdrIconDescriptor> {
         this.tracker = new MercuryTracker(this.descriptor);
         this.tracker.setPreferredSize(new Dimension(48, 48));
         this.tracker.setValue(new Random().nextInt((int) (this.descriptor.getDuration() * 1000)));
-        this.tracker.setStringPainted(false);
         this.tracker.setBackground(AppThemeColor.ADR_TEXT_ARE_BG);
-
+        this.tracker.setFont(new ComponentsFactory().getFont(FontStyle.BOLD, 20));
         this.titleLabel = this.componentsFactory.getTextLabel(this.descriptor.getTitle());
         this.titleLabel.setForeground(AppThemeColor.TEXT_DEFAULT);
         this.titleLabel.setFont(componentsFactory.getFont(FontStyle.REGULAR, 16));

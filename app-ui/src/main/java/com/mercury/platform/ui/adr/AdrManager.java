@@ -10,7 +10,6 @@ import com.mercury.platform.ui.adr.components.panel.page.*;
 import com.mercury.platform.ui.misc.MercuryStoreUI;
 import lombok.Getter;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class AdrManager implements AsSubscriber{
     private AdrManagerFrame adrManagerFrame;
 
     //pages
-    private AdrPagePanel<AdrGroupDescriptor> groupSettingsPanel;
+    private AdrPagePanel<AdrTrackerGroupDescriptor> groupSettingsPanel;
     private AdrPagePanel<AdrComponentDescriptor> mainPanel;
     private AdrPagePanel<AdrIconDescriptor> iconSettingsPanel;
     private AdrPagePanel<AdrProgressBarDescriptor> progressBarSettingsPanel;
@@ -43,8 +42,8 @@ public class AdrManager implements AsSubscriber{
         this.adrManagerFrame = new AdrManagerFrame(this.selectedProfile);
         this.selectedProfile.getContents().forEach(component -> {
             switch (component.getType()){
-                case GROUP: {
-                    this.frames.add(new AdrTrackerGroupFrame((AdrGroupDescriptor) component));
+                case TRACKER_GROUP: {
+                    this.frames.add(new AdrTrackerGroupFrame((AdrTrackerGroupDescriptor) component));
                     break;
                 }
                 case PROGRESS_BAR:{
@@ -55,15 +54,13 @@ public class AdrManager implements AsSubscriber{
                     this.frames.add(new AdrSingleComponentFrame((AdrIconDescriptor) component));
                     break;
                 }
+                case GROUP:{
+                    this.frames.add(new AdrGroupFrame((AdrGroupDescriptor) component));
+                    break;
+                }
             }
         });
         this.adrManagerFrame.init();
-        AdrTestGroup test = new AdrTestGroup();
-        test.setLocation(new Point(300,300));
-        test.setSize(new Dimension(400,400));
-        test.setTitle("Test group");
-        this.frames.add(new AdrGroupFrame(test));
-
         this.frames.forEach(it -> {
             it.init();
             it.disableSettings();
@@ -109,9 +106,9 @@ public class AdrManager implements AsSubscriber{
         MercuryStoreUI.adrComponentStateSubject.subscribe(definition -> {
            switch (definition.getOperations()){
                case NEW_COMPONENT:{
-                   if(definition.getDescriptor() instanceof AdrGroupDescriptor){
-                       AdrGroupDescriptor defaultGroup = this.config.getDefaultIconGroup();
-                       if(((AdrGroupDescriptor) definition.getDescriptor()).getContentType().equals(AdrGroupContentType.PROGRESS_BARS)) {
+                   if(definition.getDescriptor() instanceof AdrTrackerGroupDescriptor){
+                       AdrTrackerGroupDescriptor defaultGroup = this.config.getDefaultIconGroup();
+                       if(((AdrTrackerGroupDescriptor) definition.getDescriptor()).getContentType().equals(AdrTrackerGroupContentType.PROGRESS_BARS)) {
                            defaultGroup = this.config.getDefaultPBGroup();
                        }
                        this.selectedProfile.getContents().add(defaultGroup);
@@ -157,8 +154,8 @@ public class AdrManager implements AsSubscriber{
                    break;
                }
                case EDIT_COMPONENT:{
-                   if(definition.getDescriptor() instanceof AdrGroupDescriptor){
-                       this.groupSettingsPanel.setPayload((AdrGroupDescriptor) definition.getDescriptor());
+                   if(definition.getDescriptor() instanceof AdrTrackerGroupDescriptor){
+                       this.groupSettingsPanel.setPayload((AdrTrackerGroupDescriptor) definition.getDescriptor());
                        this.adrManagerFrame.setPage(this.groupSettingsPanel);
                    }
                    if(definition.getDescriptor() instanceof AdrIconDescriptor){

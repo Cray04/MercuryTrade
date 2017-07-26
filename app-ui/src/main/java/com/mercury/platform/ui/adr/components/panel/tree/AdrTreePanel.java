@@ -47,8 +47,8 @@ public class AdrTreePanel extends JPanel{
         child.forEach(it -> {
             JPanel viewOf = this.renderer.getViewOf(it,inner);
             switch (it.getType()) {
-                case GROUP: {
-                    this.addNodeHierarchy(viewOf, ((AdrGroupDescriptor) it).getCells(), true);
+                case TRACKER_GROUP: {
+                    this.addNodeHierarchy(viewOf, ((AdrTrackerGroupDescriptor) it).getCells(), true);
                     this.container.add(this.componentsFactory.wrapToSlide(viewOf, 2, 4, 2, 4));
                     break;
                 }

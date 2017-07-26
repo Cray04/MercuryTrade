@@ -25,7 +25,6 @@ public class AdrCellPanel extends AdrComponentPanel<AdrDurationComponentDescript
         this.setLayout(new GridLayout(1,1));
         this.setBackground(AppThemeColor.TRANSPARENT);
         this.setBorder(null);
-        this.createUI();
         this.setVisible(false);
     }
 
@@ -45,12 +44,12 @@ public class AdrCellPanel extends AdrComponentPanel<AdrDurationComponentDescript
     }
 
     @Override
-    protected void onSelect() {
+    public void onSelect() {
         this.progressTl.playLoop(Timeline.RepeatBehavior.LOOP);
     }
 
     @Override
-    protected void onUnSelect() {
+    public void onUnSelect() {
         this.progressTl.abort();
     }
 
@@ -61,11 +60,17 @@ public class AdrCellPanel extends AdrComponentPanel<AdrDurationComponentDescript
     }
 
     @Override
-    public void createUI() {
-        this.setPreferredSize(this.descriptor.getSize());
+    protected void onUpdate() {
         if (this.progressTl != null) {
             this.progressTl.cancel();
         }
+        this.remove(this.tracker);
+        this.createUI();
+    }
+
+    @Override
+    public void createUI() {
+        this.setPreferredSize(this.descriptor.getSize());
         this.tracker = new MercuryTracker(this.descriptor);
         this.add(this.tracker, BorderLayout.CENTER);
 
@@ -82,8 +87,5 @@ public class AdrCellPanel extends AdrComponentPanel<AdrDurationComponentDescript
             }
         });
         MercuryStoreUI.adrRepaintSubject.onNext(true);
-        if (this.inSettings) {
-            this.enableSettings();
-        }
     }
 }
